@@ -30,9 +30,18 @@
         <legend style="padding: 0em 0.5em 0em 0.5em; font-weight: bold;"><?php echo __('General settings'); ?></legend>
         <table class="fieldset" cellpadding="0" cellspacing="0" border="0">
             <tr>
+                <td class="label"><label for="settings[uri]"><?php echo __('Base uri'); ?>: </label></td>
+                <td class="field"><input class="textbox" id="settings[uri]" maxlength="255" name="settings[uri]" size="255" type="text" value="<?php echo $settings['uri']; ?>" /></td>
+                <td class="help"><?php echo __('The relative uri to the account page. Do not add the subdirectory if Wolf lives in a subdirectory. <br/>Default: account'); ?></td>
+            </tr>
+            <tr>
                 <td class="label"><label for="settings[layout]"><?php echo __('Layout'); ?>: </label></td>
-                <td class="field"><input class="textbox" id="settings[layout]" maxlength="255" name="settings[layout]" size="255" type="text" value="<?php echo $settings['layout']; ?>" /></td>
-                <td class="help"><?php echo __('The page in the frontend menu that links to the forum.'); ?></td>
+                <td class="field"><select id="settings[layout]" name="settings[layout]">
+                <?php foreach($layouts as $layout) { ?>
+                    <option value="<?php echo $layout->id; ?>" <?php if($settings[layout] == $layout->id) echo 'selected="selected"'; ?>><?php echo $layout->name; ?></option>
+                <?php } ?>
+                </select></td>
+                <td class="help"><?php echo __('The layout to use for the account pages.'); ?></td>
             </tr>
         </table>
     </fieldset>

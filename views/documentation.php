@@ -25,5 +25,5 @@
 
 <h1><?php echo __('Documentation'); ?></h1>
 <p>
-    Nothing yet... bladibla...
+    The plugin provides and taketh away.
 </p>

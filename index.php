@@ -32,17 +32,22 @@ Plugin::setInfos(array(
     'website'     => 'http://www.vanderkleijn.net/wolf-cms.html',
     'update_url'  => 'http://www.vanderkleijn.net/plugins.xml',
     'type'        => 'both',
-    'require_wolf_version' => '0.7.0'
+    'require_wolf_version' => '0.6.0'
+    //'require_wolf_version' => '0.7.0'
 ));
 
 // Setup the controller.
 Plugin::addController('account', 'Account', 'administrator', false);
 
+// Get settings
+$settings = Plugin::getAllSettings('account');
+
 // Setup routes to the forum.
 Dispatcher::addRoute(array(
-    '/account'          => '/plugin/account/index',
-    '/account/'          => '/plugin/account/index',
-    '/account/password' => '/plugin/account/password',
+    '/'.$settings['uri']                => '/plugin/account/index',
+    '/'.$settings['uri'].'/'            => '/plugin/account/index',
+    '/'.$settings['uri'].'/edit'        => '/plugin/account/edit',
+    '/'.$settings['uri'].'/password'    => '/plugin/account/password',
     //'/account/:any/'    => '/plugin/account/$1',
     //'/users'            => '/plugin/account/list',
    ));

@@ -24,20 +24,28 @@
 ?>
 
 <div id="account">
-    <h1>My Account</h1>
-    <p>
-        Welcome, <?php echo $user->name; ?>. This is an overview of your personal account on the wolfcms.org website.
-        This overview will be changed &amp; expanded upon in the future.
-    </p>
-    <p>
-        Username: <?php echo $user->username; ?><br/>
-        Full name: <?php echo $user->name; ?><br/>
-        Email: <?php echo $user->email; ?><br/>
-    </p>
+    <h1><?php echo __('My account'); ?></h1>
+    <table>
+        <tr>
+            <td><?php echo __('Username'); ?>:</td>
+            <td><?php echo $user->username; ?></td>
+        </tr>
+        <tr>
+            <td><?php echo __('Full name'); ?>:</td>
+            <td><?php echo $user->name; ?></td>
+        </tr>
+        <tr>
+            <td><?php echo __('Email'); ?>:</td>
+            <td><?php echo $user->email; ?></td>
+        </tr>
+    </table>
+
     <h2>Actions</h2>
     <ul>
-        <li><a href="<?php echo BASE_URL.'account/password' ?>">Change password</a></li>
-        <li><a href="http://www.wolfcms.org/users/reset.html">Reset password</a> (generates a password)</li>
-        <li><a href="http://www.wolfcms.org/users/logout.html">Logout</a></li>
+        <li><a href="<?php echo BASE_URL.$settings['uri'].'/edit' ?>"><?php echo __('Edit profile'); ?></a></li>
+        <li><a href="<?php echo BASE_URL.$settings['uri'].'/password' ?>"><?php echo __('Change password'); ?></a></li>
+        <?php foreach($actions as $name => $link) { ?>
+        <li><a href="<?php echo $link; ?>"><?php echo $name; ?></a></li>
+        <?php } ?>
     </ul>
 </div>

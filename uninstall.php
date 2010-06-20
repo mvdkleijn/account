@@ -25,13 +25,10 @@
 /* Security measure */
 if (!defined('IN_CMS')) { exit(); }
 
-// Check if the plugin's settings already exist and create them if not.
-if (Plugin::getSetting('version', 'account') === false) {
-    // Store settings new style
-    $settings = array('version' => '1.0.0',
-                      'layout'  => '1',
-                      'uri'     => 'account'
-                     );
-
-    Plugin::setAllSettings($settings, 'account');
+if (Plugin::deleteAllSettings('account') === false) {
+    Flash::set('error', __('Unable to delete plugin settings.'));
+    redirect(get_url('setting'));
 }
+
+Flash::set('success', __('Successfully uninstalled plugin.'));
+redirect(get_url('setting'));

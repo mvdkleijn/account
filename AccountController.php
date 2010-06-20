@@ -23,6 +23,7 @@
  */
 
 class AccountController extends PluginController {
+    static $actions = array();
 
     function __construct() {
         AuthUser::load();
@@ -32,13 +33,14 @@ class AccountController extends PluginController {
         }
         else {
             define('ACCOUNT_VIEWS', '../../plugins/account/views');
-            $page = Page::findByUri(Plugin::getSetting('layout', 'account'));
-            $layout_id = $this->getLayoutId($page);
+            //$page = Page::findByUri(Plugin::getSetting('layout', 'account'));
+            //$layout_id = $this->getLayoutId($page);
+            $settings = Plugin::getAllSettings('account');
 
-            $layout = Layout::findById($layout_id);
+            $layout = Layout::findById($settings['layout']);
             $this->setLayout($layout->name);
         }
-        $this->assignToLayout('sidebar', new View('../../plugins/forum/views/sidebar'));
+        $this->assignToLayout('sidebar', new View('../../plugins/account/views/sidebar'));
     }
 
     private function getLayoutId($page) {
@@ -65,9 +67,8 @@ class AccountController extends PluginController {
     public function index() {
         $this->_checkLoggedIn();
 
-        $this->display(ACCOUNT_VIEWS.'/index', array('user' => AuthUser::getRecord(),
-                                                     'csrf_token' => SecureToken::generateToken(BASE_URL.'account/password'),
-                                                     'url' => BASE_URL.'account/password'
+        $this->display(ACCOUNT_VIEWS.'/index', array('settings' => Plugin::getAllSettings('account'),
+                                                     'user' => AuthUser::getRecord()
                                                     ));
     }
 
@@ -85,10 +86,9 @@ class AccountController extends PluginController {
         $user = AuthUser::getRecord();
 
         // CSRF checks
-        /* Disabled until 0.7.0 is released
         if (isset($_POST['csrf_token'])) {
             $csrf_token = $_POST['csrf_token'];
-            if (!SecureToken::validateToken($csrf_token, BASE_URL.'user/add')) {
+            if (!SecureToken::validateToken($csrf_token, BASE_URL.'account/password')) {
                 $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('Invalid token found.')));
                 exit();
             }
@@ -97,8 +97,6 @@ class AccountController extends PluginController {
             $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('No CSRF token found!')));
             exit();
         }
-         *
-         */
 
         if ($user->password != sha1($data['old'].$user->salt)) {
             $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('The old password you entered was incorrect.')));
@@ -116,27 +114,77 @@ class AccountController extends PluginController {
         $this->display(ACCOUNT_VIEWS.'/success', array('message' => 'Your password was successfully changed.'));
     }
 
-    /*
+
+    public function edit() {
+        $this->_checkLoggedIn();
+
+        $user = AuthUser::getRecord();
+
+        if (!isset($_POST['profile'])) {
+            $profile = array();
+
+            $profile['username'] = $user->username;
+            $profile['name'] = $user->name;
+            $profile['email'] = $user->email;
+
+            $this->display(ACCOUNT_VIEWS.'/edit', array('profile' => $profile,
+                                                         'csrf_token' => SecureToken::generateToken(BASE_URL.'account/edit'),
+                                                         'url' => BASE_URL.'account/edit'
+            ));
+        }
+
+        $profile = $_POST['profile'];
+
+        // CSRF checks
+        if (isset($_POST['csrf_token'])) {
+            $csrf_token = $_POST['csrf_token'];
+            if (!SecureToken::validateToken($csrf_token, BASE_URL.'account/edit')) {
+                $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('Invalid token found.')));
+                exit();
+            }
+        }
+        else {
+            $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('No CSRF token found!')));
+            exit();
+        }
+
+        $errors = array();
+
+        if (strlen($profile['name']) < 3) {
+            $errors[] = __('Your username must be at least three characters.');
+        }
+
+        if (count($errors) > 0) {
+            $this->display(ACCOUNT_VIEWS.'/error', array('errors' => $errors));
+        }
+
+        // Set values
+        $user->name = $profile['name'];
+        $user->email = $profile['email'];
+
+        if (!$user->save()) {
+            $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('Unable to update profile!')));
+        }
+
+        redirect(get_url(Plugin::getSetting('uri', 'account')));
+    }
+
     public function documentation() {
         $this->display(ACCOUNT_VIEWS.'/documentation');
     }
-     *
-     */
 
-    /*
     public function settings() {
         $this->_checkLoggedIn();
 
-        if (!User::hasPermission('administrator')) {
+        if (!AuthUser::hasPermission('administrator')) {
             $this->display(ACCOUNT_VIEWS.'/403');
         }
 
-        $this->display(ACCOUNT_VIEWS.'/settings', array('settings' => Plugin::getAllSettings('account')));
+        $this->display(ACCOUNT_VIEWS.'/settings', array('settings' => Plugin::getAllSettings('account'),
+                                                        'layouts' => Layout::findAll()
+                                                        ));
     }
-     *
-     */
 
-    /*
     function save() {
         if (isset($_POST['settings'])) {
             $settings = $_POST['settings'];
@@ -155,8 +203,23 @@ class AccountController extends PluginController {
             Flash::set('error', __('Could not save settings, no settings found.'));
         }
 
-        redirect(get_url('plugin/forum/settings'));
+        redirect(get_url('plugin/account/settings'));
     }
-     *
-     */
+
+    public static function registerAction($name, $action=null) {
+        if (null === $name || (is_array($name) && null !== $action)) {
+            return false;
+        }
+
+        if (is_array($name)) {
+            foreach($name as $key => $value) {
+                self::$actions[$key] = $value;
+            }
+        }
+        else {
+            self::$actions[$name] = $value;
+        }
+
+        return true;
+    }
 }
