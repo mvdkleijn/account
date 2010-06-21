@@ -30,23 +30,23 @@
         <input id="csrf_token" name="csrf_token" type="hidden" value="<?php echo $csrf_token; ?>" />
       <table class="fieldset" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="label"><label for="old_password">Old Password</label></td>
+          <td class="label"><label for="old_password"><?php echo __('Old password'); ?></label></td>
           <td class="field"><input class="textbox" id="old_password" maxlength="40" name="user[old]" size="20" type="password" value="" /></td>
         </tr>
         <tr>
-          <td class="label"><label for="user_password">Password</label></td>
+          <td class="label"><label for="user_password"><?php echo __('Password'); ?></label></td>
           <td class="field"><input class="textbox" id="user_password" maxlength="40" name="user[password]" size="20" type="password" value="" /></td>
         </tr>
         <tr>
-          <td class="label"><label for="user_confirm">Confirm Password</label></td>
+          <td class="label"><label for="user_confirm"><?php echo __('Confirm password'); ?></label></td>
           <td class="field"><input class="textbox" id="user_confirm" maxlength="40" name="user[confirm]" size="20" type="password" value="" /></td>
         </tr>
       </table>
         <p>
-            Password should be at least 5 characters long.
+            <?php echo __('Password should be at least 5 characters long.'); ?>
         </p>
       <p class="buttons">
-        <input class="button" name="commit" type="submit" accesskey="c" value="Change password" />
+        <input class="button" name="commit" type="submit" accesskey="c" value="<?php echo __('Change password'); ?>" />
       </p>
     </form>
 </div>

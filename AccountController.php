@@ -24,6 +24,7 @@
 
 class AccountController extends PluginController {
     static $actions = array();
+    static $profile = array();
 
     function __construct() {
         AuthUser::load();
@@ -67,8 +68,15 @@ class AccountController extends PluginController {
     public function index() {
         $this->_checkLoggedIn();
 
+        // Get profile information from other plugins.
+        foreach(Observer::getObserverList('account_display_profile') as $callback) {
+            self::$profile = array_merge(self::$profile, call_user_func_array($callback, array()));
+        }
+
         $this->display(ACCOUNT_VIEWS.'/index', array('settings' => Plugin::getAllSettings('account'),
-                                                     'user' => AuthUser::getRecord()
+                                                     'user'     => AuthUser::getRecord(),
+                                                     'profile'  => self::$profile,
+                                                     'actions'  => self::$actions
                                                     ));
     }
 
@@ -217,7 +225,7 @@ class AccountController extends PluginController {
             }
         }
         else {
-            self::$actions[$name] = $value;
+            self::$actions[$name] = $action;
         }
 
         return true;

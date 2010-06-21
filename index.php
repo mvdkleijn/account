@@ -26,13 +26,12 @@ Plugin::setInfos(array(
     'id'          => 'account',
     'title'       => 'Account',
     'description' => 'Adds a My Account page to your site.',
-    'version'     => '1.0.0',
+    'version'     => '0.0.7',
     'license'     => 'GPLv3',
     'author'      => 'Martijn van der Kleijn',
     'website'     => 'http://www.vanderkleijn.net/wolf-cms.html',
     'update_url'  => 'http://www.vanderkleijn.net/plugins.xml',
     'type'        => 'both',
-    'require_wolf_version' => '0.6.0'
     //'require_wolf_version' => '0.7.0'
 ));
 
@@ -41,13 +40,14 @@ Plugin::addController('account', 'Account', 'administrator', false);
 
 // Get settings
 $settings = Plugin::getAllSettings('account');
+$uri = $settings['uri'];
 
-// Setup routes to the forum.
+// Setup routes to the account plugin.
 Dispatcher::addRoute(array(
-    '/'.$settings['uri']                => '/plugin/account/index',
-    '/'.$settings['uri'].'/'            => '/plugin/account/index',
-    '/'.$settings['uri'].'/edit'        => '/plugin/account/edit',
-    '/'.$settings['uri'].'/password'    => '/plugin/account/password',
-    //'/account/:any/'    => '/plugin/account/$1',
+    '/'.$uri                => '/plugin/account/index',
+    '/'.$uri.'/'            => '/plugin/account/index',
+    '/'.$uri.'/edit'        => '/plugin/account/edit',
+    '/'.$uri.'/password'    => '/plugin/account/password',
+    //'/'.$uri.'/:any/'    => '/plugin/account/$1',
     //'/users'            => '/plugin/account/list',
    ));

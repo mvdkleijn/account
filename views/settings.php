@@ -23,7 +23,7 @@
  */
 ?>
 
-<h1><?php echo __('Settings'); ?></h1>
+<h1>Account &ndash; <?php echo __('Settings'); ?></h1>
 
 <form action="<?php echo get_url('plugin/account/save'); ?>" method="post">
     <fieldset style="padding: 0.5em;">

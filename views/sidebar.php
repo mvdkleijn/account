@@ -22,7 +22,6 @@
  * @copyright Martijn van der Kleijn, 2010
  */
 
-if (Dispatcher::getAction() != 'view'):
 ?>
 <p class="button">
     <a href="<?php echo get_url('plugin/account/documentation'); ?>">
@@ -43,7 +42,10 @@ if (Dispatcher::getAction() != 'view'):
         <?php echo __('The Account plugin allows you to add a My Account page to your site.'); ?>
     </p>
     <p>
-        <?php echo __('Homepage'); ?>: <a href="http://www.vanderkleijn.net/">vanderkleijn.net</a>
+        <?php echo __('Homepage'); ?>: <a href="http://www.vanderkleijn.net/wolf-cms/plugins/account.html">Wolf CMS Account plugin</a><br/>
+        <?php echo __('Homepage'); ?>: <a href="http://www.wolfcms.org/">Wolf CMS</a>
+    </p>
+    <p>
+        <?php echo __('Plugin version'); ?>: 0.0.7 (2010-06-21)
     </p>
 </div>
-<?php endif; ?>

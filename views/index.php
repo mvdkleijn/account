@@ -27,17 +27,23 @@
     <h1><?php echo __('My account'); ?></h1>
     <table>
         <tr>
-            <td><?php echo __('Username'); ?>:</td>
+            <td><?php echo __('Username'); ?></td>
             <td><?php echo $user->username; ?></td>
         </tr>
         <tr>
-            <td><?php echo __('Full name'); ?>:</td>
+            <td><?php echo __('Full name'); ?></td>
             <td><?php echo $user->name; ?></td>
         </tr>
         <tr>
-            <td><?php echo __('Email'); ?>:</td>
+            <td><?php echo __('Email'); ?></td>
             <td><?php echo $user->email; ?></td>
         </tr>
+        <?php foreach($profile as $entryName => $entryValue) { ?>
+        <tr>
+            <td><?php echo $entryName; ?></td>
+            <td><?php echo $entryValue; ?></td>
+        </tr>
+        <?php } ?>
     </table>
 
     <h2>Actions</h2>

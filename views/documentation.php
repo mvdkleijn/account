@@ -23,7 +23,29 @@
  */
 ?>
 
-<h1><?php echo __('Documentation'); ?></h1>
+<h1>Account &ndash; <?php echo __('Documentation'); ?></h1>
 <p>
-    The plugin provides and taketh away.
+    The account plugin serves as a hub of sorts for user account related activities.
+    It provides several functions that allow other plugin developers to:
+</p>
+<ul>
+    <li>Display profile data</li>
+    <li>Add profile elements that are plugin specific</li>
+    <li>Add action links for users</li>
+</ul>
+<h2>Accessing the "My account" page</h2>
+<p>
+    This is fairly simple and the account plugin comes with a nice default "My account" page.
+    If we assume that you have installed your Wolf CMS in a subdirectory called "wolf", you
+    would normally access your homepage by going to:
+</p>
+<p>http://www.example.com/wolf/</p>
+<p>
+    Now, make sure you have enabled the plugin. If you want to access the "My account" page and
+    have left the "uri" setting to its default, you should be able to access the page through:
+</p>
+<p>
+    http://www.example.com/wolf/?account/<br/>
+    &mdash; or &mdash;<br/>
+    http://www.example.com/wolf/account/
 </p>
