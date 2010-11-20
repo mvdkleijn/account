@@ -80,6 +80,19 @@ class AccountController extends PluginController {
                                                     ));
     }
 
+    public function profile($username) {
+        // Get profile information from other plugins.
+        foreach(Observer::getObserverList('account_display_profile') as $callback) {
+            self::$profile = array_merge(self::$profile, call_user_func_array($callback, array()));
+        }
+
+        $this->display(ACCOUNT_VIEWS.'/profile', array('settings' => Plugin::getAllSettings('account'),
+                                                       'user'     => User::findOneFrom('User', 'username=?', array($username)),
+                                                       'profile'  => self::$profile,
+                                                       'actions'  => self::$actions
+                                                      ));
+    }
+
     public function password() {
         $this->_checkLoggedIn();
 

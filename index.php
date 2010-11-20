@@ -48,6 +48,7 @@ Dispatcher::addRoute(array(
     '/'.$uri.'/'            => '/plugin/account/index',
     '/'.$uri.'/edit'        => '/plugin/account/edit',
     '/'.$uri.'/password'    => '/plugin/account/password',
-    //'/'.$uri.'/:any/'    => '/plugin/account/$1',
+    '/'.$uri.'/:any'        => '/plugin/account/profile/$1',
+    '/'.$uri.'/:any/'       => '/plugin/account/profile/$1',
     //'/users'            => '/plugin/account/list',
    ));

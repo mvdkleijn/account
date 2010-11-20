@@ -35,3 +35,17 @@ if (Plugin::getSetting('version', 'account') === false) {
 
     Plugin::setAllSettings($settings, 'account');
 }
+
+$PDO = Record::getConnection();
+$driver = strtolower($PDO->getAttribute(Record::ATTR_DRIVER_NAME));
+
+// Setup table structure
+if ($driver == 'mysql') {
+    $PDO->exec("CREATE TABLE ".TABLE_PREFIX."account_setting (
+        id int(11) unsigned NOT NULL auto_increment,
+        user_id int(11) unsigned NOT NULL,
+        name varchar(40) NOT NULL,
+        value varchar(255) NOT NULL,
+        PRIMARY KEY (id)
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+}
