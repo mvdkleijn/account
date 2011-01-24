@@ -46,6 +46,6 @@
         <?php echo __('Homepage'); ?>: <a href="http://www.wolfcms.org/">Wolf CMS</a>
     </p>
     <p>
-        <?php echo __('Plugin version'); ?>: 0.0.7 (2010-06-21)
+        <?php echo __('Plugin version'); ?>: 0.5.0 (2011-01-24)
     </p>
 </div>

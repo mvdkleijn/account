@@ -26,17 +26,20 @@ Plugin::setInfos(array(
     'id'          => 'account',
     'title'       => 'Account',
     'description' => 'Adds a My Account page to your site.',
-    'version'     => '0.0.7',
+    'version'     => '0.5.0',
     'license'     => 'GPLv3',
     'author'      => 'Martijn van der Kleijn',
     'website'     => 'http://www.vanderkleijn.net/wolf-cms.html',
     'update_url'  => 'http://www.vanderkleijn.net/plugins.xml',
     'type'        => 'both',
-    //'require_wolf_version' => '0.7.0'
+    'require_wolf_version' => '0.7.3'
 ));
 
 // Setup the controller.
-Plugin::addController('account', 'Account', 'administrator', false);
+Plugin::addController('account', 'Account', 'admin_edit', false);
+
+// Load classes.
+AutoLoader::addFolder(CORE_ROOT.'/plugins/account/models/');
 
 // Get settings
 $settings = Plugin::getAllSettings('account');
@@ -50,5 +53,12 @@ Dispatcher::addRoute(array(
     '/'.$uri.'/password'    => '/plugin/account/password',
     '/'.$uri.'/:any'        => '/plugin/account/profile/$1',
     '/'.$uri.'/:any/'       => '/plugin/account/profile/$1',
+    '/'.$uri.'/logout/'     => '/login/logout',
     //'/users'            => '/plugin/account/list',
    ));
+
+//Observer::observe('admin_login_success', 'notifyLogin');
+
+function notifyLogin($user) {
+    Flash::setNow('message', 'You are now logged in.');
+}

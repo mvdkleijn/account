@@ -31,17 +31,42 @@ class AccountController extends PluginController {
         if (defined('CMS_BACKEND')) {
             define('ACCOUNT_VIEWS', 'account/views');
             $this->setLayout('backend');
+            $this->assignToLayout('sidebar', new View('../../plugins/account/views/sidebar'));
         }
         else {
             define('ACCOUNT_VIEWS', '../../plugins/account/views');
-            //$page = Page::findByUri(Plugin::getSetting('layout', 'account'));
-            //$layout_id = $this->getLayoutId($page);
             $settings = Plugin::getAllSettings('account');
 
             $layout = Layout::findById($settings['layout']);
             $this->setLayout($layout->name);
         }
-        $this->assignToLayout('sidebar', new View('../../plugins/account/views/sidebar'));
+        
+        // Retrieve setting
+        $uri = Plugin::getSetting('uri', 'account');
+        
+        // Add primary actions
+        if (AuthUser::isLoggedIn()) {
+            self::$actions[__('Change password')] = BASE_URL.$uri.'/password';
+            //self::$actions[__('Reset password')] = BASE_URL.'users/reset.html';
+            self::$actions[__('Edit account settings')] = BASE_URL.$uri.'/edit';
+        }
+        
+        // Add plugin actions
+        foreach(Observer::getObserverList('account_list_actions') as $callback) {
+            self::$actions = array_merge(self::$actions, call_user_func_array($callback, array()));
+        }
+        
+        // Add secondary actions
+        if (AuthUser::isLoggedIn()) {
+            //self::$actions[__('Logout')] = BASE_URL.'users/logout.html';
+            self::$actions[__('Logout')] = BASE_URL.$uri.'/logout/';
+        }
+        
+        $this->assignToLayout('account_sidebar', new View('../../plugins/account/views/actions',
+                                                    array('actions' => self::$actions,
+                                                          'settings' => Plugin::getAllSettings('account')
+                                                    )
+                                                 ));
     }
 
     private function getLayoutId($page) {
@@ -81,10 +106,12 @@ class AccountController extends PluginController {
     }
 
     public function profile($username) {
+        /* @todo User this in later versions
         // Get profile information from other plugins.
         foreach(Observer::getObserverList('account_display_profile') as $callback) {
             self::$profile = array_merge(self::$profile, call_user_func_array($callback, array()));
         }
+        */
 
         $this->display(ACCOUNT_VIEWS.'/profile', array('settings' => Plugin::getAllSettings('account'),
                                                        'user'     => User::findOneFrom('User', 'username=?', array($username)),
@@ -119,7 +146,7 @@ class AccountController extends PluginController {
             exit();
         }
 
-        if ($user->password != sha1($data['old'].$user->salt)) {
+        if (!AuthUser::validatePassword($user, $data['old'])) {
             $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('The old password you entered was incorrect.')));
         }
 
@@ -127,7 +154,7 @@ class AccountController extends PluginController {
             $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('Password and Confirm are not the same or too small!')));
         }
 
-        $user->password = sha1($data['password'].$user->salt);
+        $user->password = AuthUser::generateHashedPassword($data['password'], $user->salt);
         if (!$user->save()) {
             $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('Unable to update password!')));
         }
@@ -149,8 +176,9 @@ class AccountController extends PluginController {
             $profile['email'] = $user->email;
 
             $this->display(ACCOUNT_VIEWS.'/edit', array('profile' => $profile,
-                                                         'csrf_token' => SecureToken::generateToken(BASE_URL.'account/edit'),
-                                                         'url' => BASE_URL.'account/edit'
+                                                        'settings' => AccountSetting::findByUserId(AuthUser::getId()),
+                                                        'csrf_token' => SecureToken::generateToken(BASE_URL.'account/edit'),
+                                                        'url' => BASE_URL.'account/edit'
             ));
         }
 
@@ -168,20 +196,51 @@ class AccountController extends PluginController {
             $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('No CSRF token found!')));
             exit();
         }
-
+        
         $errors = array();
+        
+        foreach ($data as $name => $value) {
+            if (!AccountSetting::validAccountSetting($name, $value)) {
+                Flash::setNow('error', __('Account settings could not be saved! Invalid value entered for field ":name".', array(':name' => AccountSetting::accountSettingName($name))));
+                $this->index();
+            }
+            else {
+                $as = AccountSetting::find($user->id, $name);
+                if ($as) {
+                    $as->value = $value;
+                    $as->save();
+                }
+            }
+        }
 
         if (strlen($profile['name']) < 3) {
             $errors[] = __('Your username must be at least three characters.');
+        }
+        else {
+            // Store full name if valid
+            if (eregi('[^a-zA-Z0-9 \-\.@+_]', $profile['name'])) {
+                Flash::setNow('error', __('Account settings could not be saved! Invalid value entered for field ":name".', array(':name' => 'name')));
+                $this->index();
+            }
+            else {
+                $user->name = $profile['name'];
+            }
         }
 
         if (count($errors) > 0) {
             $this->display(ACCOUNT_VIEWS.'/error', array('errors' => $errors));
         }
 
-        // Set values
-        $user->name = $profile['name'];
-        $user->email = $profile['email'];
+        // Store email address if valid
+        // preg_match('/^[^@]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$/', $email)
+
+        if (eregi('[^a-zA-Z0-9 \-\.@+_]', $profile['email'])) {
+            Flash::setNow('error', __('Account settings could not be saved! Invalid value entered for field ":name".', array(':name' => 'email')));
+            $this->index();
+        }
+        else {
+            $user->email = $profile['email'];
+        }
 
         if (!$user->save()) {
             $this->display(ACCOUNT_VIEWS.'/error', array('errors' => array('Unable to update profile!')));

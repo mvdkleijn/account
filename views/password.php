@@ -24,7 +24,6 @@
 ?>
 
 <div id="account">
-    <h1>My Account</h1>
     <h2>Change password</h2>
     <form action="<?php echo $url; ?>" method="post">
         <input id="csrf_token" name="csrf_token" type="hidden" value="<?php echo $csrf_token; ?>" />

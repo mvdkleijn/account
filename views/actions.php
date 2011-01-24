@@ -23,33 +23,7 @@
  */
 ?>
 
-<div id="account">
-    <h2><?php echo __('My account'); ?></h2>
-    <table class="fieldset" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-            <th colspan="2">Account information</th>
-        </tr>
-        <tr>
-            <td><?php echo __('Username'); ?></td>
-            <td><?php echo $user->username; ?></td>
-        </tr>
-        <tr>
-            <td><?php echo __('Full name'); ?></td>
-            <td><?php echo $user->name; ?></td>
-        </tr>
-        <tr>
-            <td><?php echo __('Email'); ?></td>
-            <td><?php echo $user->email; ?></td>
-        </tr>
-        <?php foreach($profile as $entryName => $entryValue) { ?>
-        <tr>
-            <td><?php echo $entryName; ?></td>
-            <td><?php echo $entryValue; ?></td>
-        </tr>
-        <?php } ?>
-    </table>
-</div>
-<!--
+<!--div id="account"-->
 <h2 class="title">Actions...</h2>
 <div class="account-plugin-sidebar">
     <ul>
@@ -59,4 +33,4 @@
         <?php } ?>
     </ul>
 </div>
--->
+<!--/div-->

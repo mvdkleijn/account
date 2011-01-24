@@ -23,7 +23,7 @@
  */
 ?>
 
-<h1><?php echo __('My account'); ?></h1>
+<h2><?php echo __('Edit account settings'); ?></h2>
 
 <form action="<?php echo get_url(Plugin::getSetting('uri', 'account').'/edit'); ?>" method="post">
     <input id="csrf_token" name="csrf_token" type="hidden" value="<?php echo $csrf_token; ?>" />
@@ -40,6 +40,12 @@
             <td class="label"><label for="profile[email]"><?php echo __('Email'); ?>: </label></td>
             <td class="field"><input class="textbox" id="profile[email]" name="profile[email]" maxlength="255" size="20" type="text" value="<?php echo $profile['email']; ?>" /></td>
         </tr>
+        <?php foreach($settings as $setting) { ?>
+        <tr>
+            <td class="label"><label for=""><?php echo AccountSetting::accountSettingName($setting->name); ?></label></td>
+            <td class="field"><input class="textbox" name="setting[<?php echo $setting->name; ?>]" size="25" maxlength="40" type="text" value="<?php echo $setting->value; ?>" /></td>
+        </tr>
+        <?php } ?>
     </table>
     <p class="buttons">
         <input class="button" name="commit" type="submit" accesskey="s" value="<?php echo __('Save'); ?>" />
