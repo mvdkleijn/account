@@ -51,7 +51,8 @@
 </p>
 <h2>Adding the actions menu to your layout</h2>
 <p>
-    Just add the following code to a sidebar or other area in your layout:
+    If you have a sidebar or other similar area, you can add the actions menu
+    to it by adding code similar to the following code in your layout:
 </p>
 <pre><code>
 &lt;?php
@@ -59,6 +60,10 @@
       echo $this->layout_vars['account_sidebar'];
     }
 ?&gt;</code></pre>
+<p>
+    Another option would be to uncomment the actions menu code in the index.php view.
+    (.../plugins/account/views/index.php)
+</p>
 
 <h2>For plugin developers</h2>
 <h3>Adding actions to the menu</h3>
