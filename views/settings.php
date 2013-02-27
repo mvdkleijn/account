@@ -38,7 +38,7 @@
                 <td class="label"><label for="settings[layout]"><?php echo __('Layout'); ?>: </label></td>
                 <td class="field"><select id="settings[layout]" name="settings[layout]">
                 <?php foreach($layouts as $layout) { ?>
-                    <option value="<?php echo $layout->id; ?>" <?php if($settings[layout] == $layout->id) echo 'selected="selected"'; ?>><?php echo $layout->name; ?></option>
+                    <option value="<?php echo $layout->id; ?>" <?php if($settings['layout'] == $layout->id) echo 'selected="selected"'; ?>><?php echo $layout->name; ?></option>
                 <?php } ?>
                 </select></td>
                 <td class="help"><?php echo __('The layout to use for the account pages.'); ?></td>
