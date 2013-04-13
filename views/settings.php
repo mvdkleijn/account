@@ -1,7 +1,7 @@
 <?php
 /*
  * Account plugin for Wolf CMS. <http://www.wolfcms.org>
- * Copyright (C) 2010 Martijn van der Kleijn <martijn.niji@gmail.com>
+ * Copyright (C) 2010-2013 Martijn van der Kleijn <martijn.niji@gmail.com>
  *
  * This file is part of the Account plugin for Wolf CMS.
  *
@@ -16,10 +16,8 @@
  * @subpackage plugin.account
  *
  * @author Martijn van der Kleijn <martijn.niji@gmail.com>
- * @version 1.0.0
- * @since Wolf version 0.7.0
  * @license http://www.gnu.org/licenses/gpl.html GPLv3 License
- * @copyright Martijn van der Kleijn, 2010
+ * @copyright Martijn van der Kleijn, 2010-2013
  */
 ?>
 
@@ -38,7 +36,7 @@
                 <td class="label"><label for="settings[layout]"><?php echo __('Layout'); ?>: </label></td>
                 <td class="field"><select id="settings[layout]" name="settings[layout]">
                 <?php foreach($layouts as $layout) { ?>
-                    <option value="<?php echo $layout->id; ?>" <?php if($settings[layout] == $layout->id) echo 'selected="selected"'; ?>><?php echo $layout->name; ?></option>
+                    <option value="<?php echo $layout->id; ?>" <?php if($settings['layout'] == $layout->id) echo 'selected="selected"'; ?>><?php echo $layout->name; ?></option>
                 <?php } ?>
                 </select></td>
                 <td class="help"><?php echo __('The layout to use for the account pages.'); ?></td>

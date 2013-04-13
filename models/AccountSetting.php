@@ -1,20 +1,23 @@
 <?php
 /*
- * Wolf CMS - Content Management Simplified. <http://www.wolfcms.org>
- * Copyright (C) 2009-2010 Martijn van der Kleijn <martijn.niji@gmail.com>
+ * Account plugin for Wolf CMS. <http://www.wolfcms.org>
+ * Copyright (C) 2010-2013 Martijn van der Kleijn <martijn.niji@gmail.com>
  *
- * This file is part of Wolf CMS. Wolf CMS is licensed under the GNU GPLv3 license.
- * Please see license.txt for the full license text.
+ * This file is part of the Account plugin for Wolf CMS.
+ *
+ * The Account plugin for Wolf CMS is made available under the terms of the GNU GPLv3 license.
+ * Please see <http://www.gnu.org/licenses/gpl.html> for full details.
  */
 
 /**
+ * The Account plugin allows end users to view and manipulate their accounts.
+ *
  * @package wolf
- * @subpackage models
+ * @subpackage plugin.account
  *
  * @author Martijn van der Kleijn <martijn.niji@gmail.com>
- * @version 0.1
- * @license http://www.gnu.org/licenses/gpl.html GPL License
- * @copyright Martijn van der Kleijn, 2010
+ * @license http://www.gnu.org/licenses/gpl.html GPLv3 License
+ * @copyright Martijn van der Kleijn, 2010-2013
  */
 
 /**
@@ -23,7 +26,6 @@
  * @todo finish phpdoc
  *
  * @author Martijn van der Kleijn <martijn.niji@gmail.com>
- * @since Wolf version 0.7.0
  */
 class AccountSetting extends Record {
     const TABLE_NAME = 'account_setting';

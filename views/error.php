@@ -1,7 +1,7 @@
 <?php
 /*
  * Account plugin for Wolf CMS. <http://www.wolfcms.org>
- * Copyright (C) 2010 Martijn van der Kleijn <martijn.niji@gmail.com>
+ * Copyright (C) 2010-2013 Martijn van der Kleijn <martijn.niji@gmail.com>
  *
  * This file is part of the Account plugin for Wolf CMS.
  *
@@ -16,10 +16,8 @@
  * @subpackage plugin.account
  *
  * @author Martijn van der Kleijn <martijn.niji@gmail.com>
- * @version 1.0.0
- * @since Wolf version 0.7.0
  * @license http://www.gnu.org/licenses/gpl.html GPLv3 License
- * @copyright Martijn van der Kleijn, 2010
+ * @copyright Martijn van der Kleijn, 2010-2013
  */
 ?>
 

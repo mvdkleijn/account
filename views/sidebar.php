@@ -1,7 +1,7 @@
 <?php
 /*
  * Account plugin for Wolf CMS. <http://www.wolfcms.org>
- * Copyright (C) 2010 Martijn van der Kleijn <martijn.niji@gmail.com>
+ * Copyright (C) 2010-2013 Martijn van der Kleijn <martijn.niji@gmail.com>
  *
  * This file is part of the Account plugin for Wolf CMS.
  *
@@ -16,22 +16,20 @@
  * @subpackage plugin.account
  *
  * @author Martijn van der Kleijn <martijn.niji@gmail.com>
- * @version 1.0.0
- * @since Wolf version 0.7.0
  * @license http://www.gnu.org/licenses/gpl.html GPLv3 License
- * @copyright Martijn van der Kleijn, 2010
+ * @copyright Martijn van der Kleijn, 2010-2013
  */
-
+http://localhost/wolfcms/wolf/icons/add-folder-32.png
 ?>
 <p class="button">
     <a href="<?php echo get_url('plugin/account/documentation'); ?>">
-        <img src="<?php echo URL_PUBLIC; ?>wolf/plugins/account/images/documentation.png" align="middle" alt="documentation icon" />
+        <img src="<?php echo ICONS_URI; ?>/documentation-32-ns.png" align="middle" alt="documentation icon" />
         <?php echo __('Documentation'); ?>
     </a>
 </p>
 <p class="button">
     <a href="<?php echo get_url('plugin/account/settings'); ?>">
-        <img src="<?php echo URL_PUBLIC; ?>wolf/plugins/account/images/settings.png" align="middle" alt="settings icon" />
+        <img src="<?php echo ICONS_URI; ?>/settings-32-ns.png" align="middle" alt="settings icon" />
         <?php echo __('Settings'); ?>
     </a>
 </p>
@@ -43,9 +41,8 @@
     </p>
     <p>
         <?php echo __('Homepage'); ?>: <a href="http://www.vanderkleijn.net/wolf-cms/plugins/account.html">Wolf CMS Account plugin</a><br/>
-        <?php echo __('Homepage'); ?>: <a href="http://www.wolfcms.org/">Wolf CMS</a>
     </p>
     <p>
-        <?php echo __('Plugin version'); ?>: 0.5.0 (2011-01-24)
+        <?php echo __('Plugin version: :version', array(':version' => ACCOUNT_VERSION)); ?>
     </p>
 </div>

@@ -1,7 +1,7 @@
 <?php
 /*
  * Account plugin for Wolf CMS. <http://www.wolfcms.org>
- * Copyright (C) 2010 Martijn van der Kleijn <martijn.niji@gmail.com>
+ * Copyright (C) 2010-2013 Martijn van der Kleijn <martijn.niji@gmail.com>
  *
  * This file is part of the Account plugin for Wolf CMS.
  *
@@ -16,10 +16,8 @@
  * @subpackage plugin.account
  *
  * @author Martijn van der Kleijn <martijn.niji@gmail.com>
- * @version 1.0.0
- * @since Wolf version 0.7.0
  * @license http://www.gnu.org/licenses/gpl.html GPLv3 License
- * @copyright Martijn van der Kleijn, 2010
+ * @copyright Martijn van der Kleijn, 2010-2013
  */
 
 class AccountController extends PluginController {
@@ -58,7 +56,6 @@ class AccountController extends PluginController {
         
         // Add secondary actions
         if (AuthUser::isLoggedIn()) {
-            //self::$actions[__('Logout')] = BASE_URL.'users/logout.html';
             self::$actions[__('Logout')] = BASE_URL.$uri.'/logout/';
         }
         
@@ -106,12 +103,10 @@ class AccountController extends PluginController {
     }
 
     public function profile($username) {
-        /* @todo User this in later versions
         // Get profile information from other plugins.
         foreach(Observer::getObserverList('account_display_profile') as $callback) {
             self::$profile = array_merge(self::$profile, call_user_func_array($callback, array()));
         }
-        */
 
         $this->display(ACCOUNT_VIEWS.'/profile', array('settings' => Plugin::getAllSettings('account'),
                                                        'user'     => User::findOneFrom('User', 'username=?', array($username)),
@@ -165,7 +160,7 @@ class AccountController extends PluginController {
 
     public function edit() {
         $this->_checkLoggedIn();
-
+        use_helper('Validate');
         $user = AuthUser::getRecord();
 
         if (!isset($_POST['profile'])) {
@@ -232,9 +227,7 @@ class AccountController extends PluginController {
         }
 
         // Store email address if valid
-        // preg_match('/^[^@]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$/', $email)
-
-        if (eregi('[^a-zA-Z0-9 \-\.@+_]', $profile['email'])) {
+        if (!Validate::email($profile['email'])) {
             Flash::setNow('error', __('Account settings could not be saved! Invalid value entered for field ":name".', array(':name' => 'email')));
             $this->index();
         }
@@ -269,7 +262,7 @@ class AccountController extends PluginController {
         if (isset($_POST['settings'])) {
             $settings = $_POST['settings'];
             foreach ($settings as $key => $value) {
-                $settings[$key] = mysql_escape_string($value);
+                $settings[$key] = $value; // No need to quote since Plugin::setAllSettings uses prepared statements
             }
 
             if (Plugin::setAllSettings($settings, 'account')) {
