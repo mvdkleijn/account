@@ -295,4 +295,41 @@ class AccountController extends PluginController {
 
         return true;
     }
+
+    /**
+     * 
+     * 
+     * @todo Make this function part of Plugin?
+     * @todo replace is_object by check if its Node or descendent of Node
+     * 
+     * @param Node $node
+     */
+    private static function __displayResult(Node $node) {
+        if (is_object($node)) {
+            // If the Node is in preview status, only display to logged in users
+            if (Page::STATUS_PREVIEW == $node->status_id) {
+                AuthUser::load();
+                if (!AuthUser::isLoggedIn() || !AuthUser::hasPermission('page_view'))
+                    pageNotFound();
+            }
+
+            // If Node needs login, fire login required event
+            if ($node->getLoginNeeded() == Page::LOGIN_REQUIRED) {
+                AuthUser::load();
+                if (!AuthUser::isLoggedIn()) {
+                    Observer::notify('login_required');
+                    AuthUser::load();
+                    if (!AuthUser::isLoggedIn()) {
+                        throw new Exception('User still not logged in after login_required event fired.');
+                    }
+                }
+            }
+
+            Observer::notify('node_found', $node);
+            $node->_executeLayout();
+        }
+        else {
+            pageNotFound();
+        }
+    }
 }
