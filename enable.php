@@ -21,12 +21,12 @@
  */
 
 /* Security measure */
-if (!defined('IN_CMS')) { exit(); }
+if (!defined('IN_CMS') || !defined('ACCOUNT_VERSION')) { exit(); }
 
 // Check if the plugin's settings already exist and create them if not.
 if (Plugin::getSetting('version', 'account') === false) {
     // Store settings new style
-    $settings = array('version' => '1.0.0',
+    $settings = array('version' => ACCOUNT_VERSION,
                       'layout'  => '1',
                       'uri'     => 'account'
                      );
@@ -46,4 +46,14 @@ if ($driver == 'mysql') {
         value varchar(255) NOT NULL,
         PRIMARY KEY (id)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8");
+}
+
+if ($driver == 'sqlite') {
+    Flash::setNow('error', __('Our appologies, your database type is not yet supported by this plugin.'));
+    return;
+}
+
+if ($driver == 'pgsql') {
+    Flash::setNow('error', __('Our appologies, your database type is not yet supported by this plugin.'));
+    return;
 }
