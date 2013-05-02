@@ -158,6 +158,9 @@ class AccountController extends PluginController {
     }
 
 
+    /**
+     * Allows user to edit their account settings.
+     */
     public function edit() {
         $this->_checkLoggedIn();
         use_helper('Validate');
@@ -242,10 +245,16 @@ class AccountController extends PluginController {
         redirect(get_url(Plugin::getSetting('uri', 'account')));
     }
 
+    /**
+     * Displays documentation to user.
+     */
     public function documentation() {
         $this->display(ACCOUNT_VIEWS.'/documentation');
     }
 
+    /**
+     * Allows user to change plugin's setings.
+     */
     public function settings() {
         $this->_checkLoggedIn();
 
@@ -279,8 +288,37 @@ class AccountController extends PluginController {
         redirect(get_url('plugin/account/settings'));
     }
 
-    public static function registerAction($name, $action=null) {
-        if (null === $name || (is_array($name) && null !== $action)) {
+    /**
+     * Allows for an action link to be registered with the plugin.
+     * 
+     * Action links will/can be displayed in an "action menu" when the user visits
+     * his or her "My Account" page.
+     * 
+     * An example of registering an new action:
+     * 
+     * <code>
+     * AccountController::registerAction(__('Give kudos'), get_url('givekudos'));
+     * </code>
+     * 
+     * It is also possible to register multiple actions at once by providing an
+     * array instead of a string for the name argument and not providing the url
+     * argument. For example:
+     * 
+     * <code>
+     * $actions = array(
+     *     'Give kudos' => get_url('givekudos'),
+     *     'Action 2'   => get_url('some-action')
+     * );
+     * 
+     * AccountController::registerAction($actions);
+     * </code>
+     * 
+     * @param string $name  Displayable name, preferably i18N, of action.
+     * @param string $url   Url that points to or executes the action.
+     * @return boolean      Returns TRUE if action registered successfully.
+     */
+    public static function registerAction($name, $url=null) {
+        if (null === $name || (is_array($name) && null !== $url)) {
             return false;
         }
 
@@ -290,7 +328,7 @@ class AccountController extends PluginController {
             }
         }
         else {
-            self::$actions[$name] = $action;
+            self::$actions[$name] = $url;
         }
 
         return true;
